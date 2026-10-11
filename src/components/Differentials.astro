@@ -1,0 +1,40 @@
+---
+import { differentials } from '../data/site';
+---
+
+<ul class="diffs">
+  {
+    differentials.map((d) => (
+      <li class="diff">
+        <strong>{d.title}</strong>
+        <span class="muted">{d.text}</span>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .diffs {
+    list-style: none;
+    margin: 0;
+    padding: 8px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .diff {
+    flex: 1 1 220px;
+    background: var(--c-nevoa);
+    border-radius: var(--r-tile);
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .diff span {
+    font-size: 14px;
+  }
+  :global(.section--nevoa) .diff {
+    background: var(--c-branco);
+  }
+</style>

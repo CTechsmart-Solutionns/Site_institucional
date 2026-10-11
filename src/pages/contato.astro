@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ContactSection from '../components/ContactSection.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import Steps from '../components/Steps.astro';
+
+const breadcrumbs = [
+  { name: 'Início', href: '/' },
+  { name: 'Agendar demonstração', href: '/contato' },
+];
+---
+
+<BaseLayout
+  title="Agende uma demonstração gratuita"
+  description="Agende uma demonstração gratuita da CTechsmart e veja o chatbot e o Fast-Lab funcionando na rotina da sua clínica ou laboratório."
+  breadcrumbs={breadcrumbs}
+  jsonLd={[
+    {
+      '@context': 'https://schema.org',
+      '@type': 'ContactPage',
+      name: 'Agendar demonstração — CTechsmart Solutions',
+      url: new URL('/contato', Astro.site).href,
+      about: { '@id': new URL('/#organization', Astro.site).href },
+    },
+  ]}
+>
+  <div class="crumbs-bar">
+    <div class="container">
+      <Breadcrumbs items={breadcrumbs} />
+    </div>
+  </div>
+
+  <ContactSection headingLevel="h1" title="Agende uma demonstração gratuita" />
+
+  <section class="section">
+    <div class="container stack">
+      <SectionHeader
+        eyebrow="Depois do contato"
+        title="O que acontece a seguir"
+        lead="Sem compromisso: a demonstração serve para você ver se a plataforma resolve a rotina da sua equipe."
+      />
+      <Steps />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .crumbs-bar {
+    background: var(--c-marinho);
+    padding-top: 24px;
+  }
+  .crumbs-bar :global(.crumbs ol),
+  .crumbs-bar :global(.crumbs a) {
+    color: var(--c-cinza-claro);
+  }
+  .crumbs-bar :global(.crumbs a:hover) {
+    color: var(--c-ciano);
+  }
+  .crumbs-bar + :global(#contato) {
+    padding-top: 48px;
+  }
+</style>

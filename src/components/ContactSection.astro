@@ -1,0 +1,295 @@
+---
+import Icon from './Icon.astro';
+import { site, whatsappIntl } from '../data/site';
+import { solutions } from '../data/solutions';
+
+interface Props {
+  /** Na página /contato o título vira o h1. */
+  headingLevel?: 'h1' | 'h2';
+  title?: string;
+  /** Pré-seleciona a solução de interesse (slug). */
+  interest?: string;
+}
+const {
+  headingLevel = 'h2',
+  title = 'Veja a plataforma funcionando na sua realidade',
+  interest,
+} = Astro.props;
+const Heading = headingLevel;
+---
+
+<section id="contato" class="section section--dark on-dark">
+  <div class="container contact">
+    <div class="contact__text">
+      <p class="eyebrow">Contato</p>
+      <Heading class="h2">{title}</Heading>
+      <p class="lead">
+        Agende uma demonstração gratuita. Em poucos minutos mostramos como o chatbot e o Fast-Lab se
+        encaixam na sua clínica ou laboratório.
+      </p>
+      {
+        (site.contact.whatsapp || site.contact.email) && (
+          <ul class="contact__channels">
+            {site.contact.whatsapp && (
+              <li>
+                <Icon name="whatsapp" size={20} color="#67E8F9" />
+                <a href={`https://wa.me/${whatsappIntl}`} rel="noopener">
+                  WhatsApp: {site.contact.whatsapp}
+                </a>
+              </li>
+            )}
+            {site.contact.email && (
+              <li>
+                <Icon name="mail" size={20} color="#67E8F9" />
+                <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
+              </li>
+            )}
+          </ul>
+        )
+      }
+    </div>
+
+    <form
+      class="form"
+      method="post"
+      action={site.formEndpoint ?? undefined}
+      data-endpoint={site.formEndpoint ?? ''}
+      novalidate
+    >
+      <div class="field">
+        <label for="f-nome">Seu nome</label>
+        <input id="f-nome" name="nome" type="text" placeholder="Nome completo" autocomplete="name" required />
+      </div>
+      <div class="field">
+        <label for="f-empresa">Clínica ou laboratório</label>
+        <input id="f-empresa" name="empresa" type="text" placeholder="Nome da empresa" autocomplete="organization" required />
+      </div>
+      <div class="form__row">
+        <div class="field">
+          <label for="f-whats">WhatsApp</label>
+          <input id="f-whats" name="whatsapp" type="tel" placeholder="(00) 00000-0000" autocomplete="tel" inputmode="tel" required />
+        </div>
+        <div class="field">
+          <label for="f-email">E-mail</label>
+          <input id="f-email" name="email" type="email" placeholder="voce@empresa.com.br" autocomplete="email" required />
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-interesse">Tenho interesse em</label>
+        <select id="f-interesse" name="interesse">
+          <option value="todas">As duas soluções</option>
+          {solutions.map((s) => <option value={s.slug} selected={s.slug === interest}>{s.name}</option>)}
+        </select>
+      </div>
+      <!-- Honeypot anti-spam: invisível para pessoas. -->
+      <div class="sr-only" aria-hidden="true">
+        <label for="f-site">Não preencha</label>
+        <input id="f-site" name="_gotcha" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+      <button type="submit" class="btn btn--primary form__submit">Quero uma demonstração</button>
+      {
+        !site.formEndpoint && (site.contact.whatsapp || site.contact.email) && (
+          <noscript>
+            <p class="form__noscript">
+              Para enviar o formulário, ative o JavaScript ou fale com a gente pelo WhatsApp ou e-mail.
+            </p>
+          </noscript>
+        )
+      }
+      <p id="form-status" class="form__status" role="status" aria-live="polite"></p>
+      <p class="form__legal">
+        Ao enviar, você concorda em ser contatado pela CTechsmart Solutions. Usamos seus dados só para
+        falar sobre a demonstração e não os vendemos nem cedemos para marketing de terceiros. Veja a
+        <a href="/politica-de-privacidade">Política de privacidade</a>.
+      </p>
+    </form>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('form.form').forEach((form) => {
+    const status = form.querySelector<HTMLElement>('.form__status')!;
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+
+    const fields = form.querySelectorAll<HTMLInputElement>('input[required]');
+
+    // Campo corrigido deixa de ser anunciado como inválido.
+    fields.forEach((field) =>
+      field.addEventListener('input', () => {
+        if (field.validity.valid) {
+          field.removeAttribute('aria-invalid');
+          field.removeAttribute('aria-describedby');
+        }
+      }),
+    );
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      status.dataset.state = '';
+
+      if (!form.checkValidity()) {
+        const invalid = [...fields].filter((field) => !field.validity.valid);
+        fields.forEach((field) => {
+          if (invalid.includes(field)) {
+            field.setAttribute('aria-invalid', 'true');
+            field.setAttribute('aria-describedby', status.id);
+          } else {
+            field.removeAttribute('aria-invalid');
+            field.removeAttribute('aria-describedby');
+          }
+        });
+        const labels = invalid.map((field) => field.labels?.[0]?.textContent?.trim()).filter(Boolean);
+        status.dataset.state = 'error';
+        status.textContent = `Verifique: ${labels.join(', ')}.`;
+        invalid[0]?.focus();
+        return;
+      }
+
+      const endpoint = form.dataset.endpoint;
+      if (!endpoint) {
+        status.dataset.state = 'error';
+        status.textContent = 'Formulário ainda não configurado.';
+        console.warn('[contato] Defina site.formEndpoint em src/data/site.ts');
+        return;
+      }
+
+      button.disabled = true;
+      status.textContent = 'Enviando…';
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        form.reset();
+        status.dataset.state = 'success';
+        status.textContent = 'Recebemos seu pedido! Em breve entraremos em contato.';
+      } catch {
+        status.dataset.state = 'error';
+        status.textContent = 'Não foi possível enviar agora. Tente novamente em instantes.';
+      } finally {
+        button.disabled = false;
+      }
+    });
+  });
+</script>
+
+<style>
+  .contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 56px;
+    align-items: flex-start;
+  }
+  .contact__text {
+    flex: 1 1 380px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .contact__channels {
+    list-style: none;
+    margin: 0;
+    padding: 8px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 15px;
+  }
+  .contact__channels li {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .contact__channels a {
+    color: var(--c-branco);
+    text-decoration: none;
+  }
+  .contact__channels a:hover {
+    color: var(--c-ciano);
+  }
+
+  .form {
+    flex: 1 1 420px;
+    min-width: 0;
+    background: var(--c-branco);
+    color: var(--c-marinho);
+    border-radius: var(--r-form);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .form :focus-visible {
+    outline-color: var(--c-petroleo);
+  }
+  .form__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .form__row .field {
+    flex: 1 1 180px;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field label {
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .field input,
+  .field select {
+    font: inherit;
+    font-size: 15px;
+    padding: 13px 14px;
+    border: 1px solid var(--c-borda-input);
+    border-radius: var(--r-input);
+    color: var(--c-marinho);
+    background: var(--c-branco);
+  }
+  .field input:focus,
+  .field select:focus {
+    border-color: var(--c-petroleo);
+  }
+  .form__submit {
+    margin-top: 8px;
+    padding: 16px;
+    width: 100%;
+  }
+  .form__submit:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+  .form__status {
+    font-size: 14px;
+    font-weight: 600;
+  }
+  /* Vazio, sai do fluxo (sem o gap do flex) mas continua renderizado:
+     com display:none os leitores de tela costumam não anunciar a mensagem. */
+  .form__status:empty {
+    position: absolute;
+  }
+  .field input[aria-invalid='true'] {
+    border-color: #b42318;
+  }
+  .form__noscript {
+    font-size: 14px;
+    font-weight: 600;
+    color: #b42318;
+  }
+  .form__status[data-state='success'] {
+    color: var(--c-petroleo);
+  }
+  .form__status[data-state='error'] {
+    color: #b42318;
+  }
+  .form__legal {
+    font-size: 12px;
+    color: var(--c-ardosia);
+  }
+</style>

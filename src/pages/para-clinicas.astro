@@ -1,0 +1,8 @@
+---
+import AudiencePage from '../components/AudiencePage.astro';
+import { audiences } from '../data/audiences';
+
+const audience = audiences.find((a) => a.slug === 'para-clinicas')!;
+---
+
+<AudiencePage audience={audience} />

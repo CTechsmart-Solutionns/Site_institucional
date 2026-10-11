@@ -1,0 +1,58 @@
+---
+import CheckList from './CheckList.astro';
+import type { Audience } from '../data/audiences';
+
+interface Props {
+  audience: Audience;
+  dark?: boolean;
+}
+const { audience, dark = false } = Astro.props;
+---
+
+<article class:list={['aud', { 'aud--dark on-dark': dark }]}>
+  <h3 class="aud__title">{audience.name}</h3>
+  <p class="aud__text">{audience.summary}</p>
+  <CheckList items={audience.checks} dark={dark} />
+  <a class="aud__link" href={`/${audience.slug}`}>
+    Ver soluções para {audience.name.toLowerCase()} →
+  </a>
+</article>
+
+<style>
+  .aud {
+    flex: 1 1 420px;
+    min-width: 0;
+    background: var(--c-branco);
+    border-radius: var(--r-card);
+    padding: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .aud__title {
+    font-size: 26px;
+  }
+  .aud__text {
+    color: var(--c-ardosia);
+  }
+  .aud__link {
+    margin-top: auto;
+    padding-top: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+  }
+  .aud--dark {
+    background: var(--c-marinho);
+    color: var(--c-branco);
+  }
+  .aud--dark .aud__text {
+    color: var(--c-cinza-claro);
+  }
+  .aud--dark .aud__link {
+    color: var(--c-ciano);
+  }
+  .aud--dark .aud__link:hover {
+    color: var(--c-branco);
+  }
+</style>

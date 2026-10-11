@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { solutions } from '../data/solutions';
+---
+
+<BaseLayout
+  title="Página não encontrada"
+  description="A página que você procurou não existe ou mudou de endereço."
+  noindex
+>
+  <section class="section section--nevoa nf">
+    <div class="container nf__inner">
+      <p class="eyebrow">Erro 404</p>
+      <h1 class="nf__title">Página não encontrada</h1>
+      <p class="lead">O endereço pode ter mudado. Estes links podem ajudar:</p>
+      <ul class="nf__links">
+        <li><a href="/">Página inicial</a></li>
+        {
+          solutions.map((s) => (
+            <li>
+              <a href={`/solucoes/${s.slug}`}>{s.name}</a>
+            </li>
+          ))
+        }
+        <li><a href="/contato">Agendar demonstração</a></li>
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-height: 40vh;
+  }
+  .nf__title {
+    font-size: 46px;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+  .nf__links {
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+</style>

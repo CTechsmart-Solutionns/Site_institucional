@@ -1,0 +1,132 @@
+---
+import Logo from './Logo.astro';
+import { mainNav } from '../data/site';
+---
+
+<header class="header">
+  <div class="container header__inner">
+    <a href="/" class="header__brand" aria-label="CTechsmart Solutions — página inicial">
+      <Logo />
+    </a>
+    <button
+      class="header__toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="menu-principal"
+    >
+      <span class="sr-only">Abrir menu</span>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M4 7h16M4 12h16M4 17h16"></path>
+      </svg>
+    </button>
+    <nav id="menu-principal" class="header__nav" aria-label="Principal">
+      {mainNav.map((item) => <a href={item.href}>{item.label}</a>)}
+      <a href="/contato" class="btn btn--primary header__cta">Agendar demonstração</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.header__toggle');
+  const nav = document.getElementById('menu-principal');
+  if (toggle && nav) {
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      nav.toggleAttribute('data-open', open);
+      toggle.querySelector('.sr-only')!.textContent = open ? 'Fechar menu' : 'Abrir menu';
+    };
+    toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+    nav.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) setOpen(false);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') setOpen(false);
+    });
+  }
+</script>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--c-branco);
+    border-bottom: 1px solid var(--c-borda);
+  }
+  .header__inner {
+    padding-top: 16px;
+    padding-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .header__brand {
+    text-decoration: none;
+  }
+  .header__nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 28px;
+    font-size: 15px;
+  }
+  .header__nav a:not(.btn) {
+    color: var(--c-marinho);
+    text-decoration: none;
+    padding: 10px 0;
+  }
+  .header__nav a:not(.btn):hover {
+    color: var(--c-petroleo);
+  }
+  .header__cta {
+    font-size: 15px;
+    padding: 12px 20px;
+    border-radius: var(--r-input);
+  }
+  .header__toggle {
+    display: none;
+    background: none;
+    border: 1px solid var(--c-borda-input);
+    border-radius: var(--r-input);
+    padding: 8px;
+    color: var(--c-marinho);
+    cursor: pointer;
+  }
+
+  /* Sem JS (sem a classe .js no <html>), o menu aparece aberto abaixo do logo e o botão fica oculto. */
+  @media (max-width: 900px) {
+    .header__inner {
+      flex-wrap: wrap;
+    }
+    :global(.js) .header__toggle {
+      display: block;
+    }
+    .header__nav {
+      flex-basis: 100%;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+    }
+    :global(.js) .header__nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--c-branco);
+      border-bottom: 1px solid var(--c-borda);
+      padding: 8px var(--gutter) 24px;
+    }
+    :global(.js) .header__nav[data-open] {
+      display: flex;
+    }
+    .header__nav a:not(.btn) {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--c-borda);
+    }
+    .header__cta {
+      margin-top: 16px;
+    }
+  }
+</style>

@@ -1,0 +1,52 @@
+---
+interface Props {
+  items: { title: string; text: string }[];
+}
+const { items } = Astro.props;
+// 3 colunas para múltiplos de 3, senão 2 ou 4 — evita linha final incompleta.
+const cols = items.length % 3 === 0 ? 3 : items.length % 4 === 0 ? 4 : 2;
+---
+
+<ul class="benefits" style={`--cols: ${cols}`}>
+  {
+    items.map((b) => (
+      <li class="benefit">
+        <h3>{b.title}</h3>
+        <p class="muted">{b.text}</p>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .benefits {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    gap: 24px;
+  }
+  @media (max-width: 1000px) {
+    .benefits {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 600px) {
+    .benefits {
+      grid-template-columns: 1fr;
+    }
+  }
+  .benefit {
+    border: 1px solid var(--c-borda);
+    border-radius: var(--r-card);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: var(--c-branco);
+  }
+  .benefit h3 {
+    font-size: 19px;
+  }
+</style>

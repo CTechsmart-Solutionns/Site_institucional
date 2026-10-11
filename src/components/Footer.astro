@@ -1,0 +1,86 @@
+---
+import Logo from './Logo.astro';
+import { footerNav, site } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer on-dark">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <Logo variant="dark" size="sm" />
+      <p>Chatbot de atendimento e Fast-Lab: agendamento e gestão para clínicas e laboratórios.</p>
+    </div>
+    <nav aria-label="Rodapé" class="footer__nav">
+      {
+        footerNav.map((group) => (
+          <div class="footer__group">
+            <p class="footer__title">{group.title}</p>
+            <ul>
+              {group.links.map((link) => (
+                <li>
+                  <a href={link.href}>{link.label}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </nav>
+  </div>
+  <div class="container footer__bottom">
+    © {year} {site.name}{site.cnpj && ` · CNPJ ${site.cnpj}`}
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--c-footer);
+    color: var(--c-cinza-claro);
+    font-size: 14px;
+  }
+  .footer__inner {
+    padding-top: 56px;
+    padding-bottom: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 40px;
+  }
+  .footer__brand {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 280px;
+  }
+  .footer__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px 64px;
+  }
+  .footer__title {
+    color: var(--c-branco);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .footer__group ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .footer a {
+    color: var(--c-cinza-claro);
+    text-decoration: none;
+  }
+  .footer a:hover {
+    color: var(--c-ciano);
+  }
+  .footer__bottom {
+    padding-top: 24px;
+    padding-bottom: 32px;
+    border-top: 1px solid rgba(182, 195, 207, 0.15);
+  }
+</style>

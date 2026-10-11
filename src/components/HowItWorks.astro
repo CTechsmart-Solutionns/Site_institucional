@@ -1,0 +1,19 @@
+---
+// Seção "Como funciona" (passos + diferenciais), igual na home e nas páginas internas.
+import SectionHeader from './SectionHeader.astro';
+import Steps from './Steps.astro';
+import Differentials from './Differentials.astro';
+
+interface Props {
+  id?: string;
+}
+const { id } = Astro.props;
+---
+
+<section id={id} class="section">
+  <div class="container stack">
+    <SectionHeader eyebrow="Como funciona" title="Do primeiro contato ao sistema rodando" />
+    <Steps />
+    <Differentials />
+  </div>
+</section>

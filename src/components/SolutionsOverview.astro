@@ -1,0 +1,25 @@
+---
+// Seção com os cards das duas soluções, usada na home e nas páginas de público.
+import SectionHeader from './SectionHeader.astro';
+import SolutionCard from './SolutionCard.astro';
+import { solutions } from '../data/solutions';
+
+interface Props {
+  id?: string;
+  nevoa?: boolean;
+}
+const { id, nevoa = false } = Astro.props;
+---
+
+<section id={id} class:list={['section', { 'section--nevoa': nevoa }]}>
+  <div class="container stack">
+    <SectionHeader
+      eyebrow="Soluções"
+      title="Duas soluções que trabalham juntas"
+      lead="Contrate o que precisa agora e adicione a outra quando quiser. Os dados circulam entre elas sem retrabalho."
+    />
+    <div class="grid-auto">
+      {solutions.map((s) => <SolutionCard solution={s} />)}
+    </div>
+  </div>
+</section>

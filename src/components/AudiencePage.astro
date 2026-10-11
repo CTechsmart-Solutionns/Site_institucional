@@ -1,0 +1,66 @@
+---
+// Template das páginas /para-clinicas e /para-laboratorios.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from './PageHero.astro';
+import SectionHeader from './SectionHeader.astro';
+import BenefitGrid from './BenefitGrid.astro';
+import SolutionsOverview from './SolutionsOverview.astro';
+import HowItWorks from './HowItWorks.astro';
+import Faq from './Faq.astro';
+import ContactSection from './ContactSection.astro';
+import { audiences, type Audience } from '../data/audiences';
+import { faqPageLd, serviceLd } from '../lib/jsonld';
+
+interface Props {
+  audience: Audience;
+}
+const { audience } = Astro.props;
+const other = audiences.find((a) => a.slug !== audience.slug)!;
+const path = `/${audience.slug}`;
+const breadcrumbs = [
+  { name: 'Início', href: '/' },
+  { name: audience.name, href: path },
+];
+---
+
+<BaseLayout
+  title={audience.seo.title}
+  description={audience.seo.description}
+  breadcrumbs={breadcrumbs}
+  jsonLd={[
+    serviceLd({
+      name: audience.h1,
+      description: audience.seo.description,
+      url: new URL(path, Astro.site).href,
+      siteUrl: Astro.site!,
+      audience: audience.name,
+    }),
+    faqPageLd(audience.faq),
+  ]}
+>
+  <PageHero breadcrumbs={breadcrumbs} eyebrow={audience.eyebrow} title={audience.h1} intro={audience.intro} />
+
+  <section class="section">
+    <div class="container stack">
+      <SectionHeader eyebrow="Desafios do dia a dia" title="Problemas que a plataforma resolve" />
+      <BenefitGrid items={audience.pains} />
+    </div>
+  </section>
+
+  <SolutionsOverview nevoa />
+
+  <HowItWorks />
+
+  <section class="section section--nevoa">
+    <div class="container stack">
+      <SectionHeader eyebrow="Dúvidas frequentes" title={`Perguntas de ${audience.name.toLowerCase()}`} />
+      <Faq items={audience.faq} />
+      <p class="muted">
+        Também atendemos {other.name.toLowerCase()}:
+        <a href={`/${other.slug}`}>veja as soluções para {other.name.toLowerCase()}</a>.
+      </p>
+    </div>
+  </section>
+
+  <ContactSection />
+</BaseLayout>

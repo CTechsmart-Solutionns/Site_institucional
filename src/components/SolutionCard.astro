@@ -1,0 +1,88 @@
+---
+import Icon from './Icon.astro';
+import type { Solution } from '../data/solutions';
+
+interface Props {
+  solution: Solution;
+}
+const { solution } = Astro.props;
+const href = `/solucoes/${solution.slug}`;
+---
+
+<article class="card">
+  {
+    solution.brand ? (
+      <img class="card__brand" src={solution.brand.symbol.src} width="52" height="52" alt="" />
+    ) : (
+      <div class="card__icon">
+        <Icon name={solution.icon} size={26} color="#0E7490" />
+      </div>
+    )
+  }
+  <h3 class="card__title"><a href={href}>{solution.name}</a></h3>
+  <p class="muted">{solution.summary}</p>
+  <ul class="card__list">
+    {solution.bullets.map((b) => <li>{b}</li>)}
+  </ul>
+  <span class="card__more" aria-hidden="true">Saiba mais →</span>
+</article>
+
+<style>
+  .card {
+    position: relative;
+    flex: 1 1 300px;
+    min-width: 0;
+    border: 1px solid var(--c-borda);
+    border-radius: var(--r-card);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: var(--c-branco);
+    transition: border-color 0.15s;
+  }
+  .card:hover {
+    border-color: var(--c-petroleo);
+  }
+  .card__icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--r-tile);
+    background: var(--c-icone-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card__brand {
+    width: 52px;
+    height: 52px;
+  }
+  .card__title {
+    font-size: 22px;
+  }
+  .card__title a {
+    color: inherit;
+    text-decoration: none;
+  }
+  /* Card inteiro clicável, mantendo um único link acessível (o título). */
+  .card__title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--r-card);
+  }
+  .card__list {
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 15px;
+  }
+  .card__more {
+    margin-top: auto;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--c-petroleo);
+  }
+</style>

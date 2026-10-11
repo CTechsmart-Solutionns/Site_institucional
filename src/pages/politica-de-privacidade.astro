@@ -1,0 +1,120 @@
+---
+// MODELO — o texto precisa ser revisado por um profissional jurídico antes da publicação.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../data/site';
+
+const breadcrumbs = [
+  { name: 'Início', href: '/' },
+  { name: 'Política de privacidade', href: '/politica-de-privacidade' },
+];
+const email = site.contact.email ?? '[E-MAIL DO ENCARREGADO]';
+---
+
+<BaseLayout
+  title="Política de privacidade"
+  description="Como a CTechsmart Solutions coleta, usa e protege os dados pessoais enviados pelo site, conforme a LGPD."
+  breadcrumbs={breadcrumbs}
+  noindex
+>
+  <PageHero
+    breadcrumbs={breadcrumbs}
+    eyebrow="LGPD"
+    title="Política de privacidade"
+    intro="Como tratamos os dados pessoais que você nos envia por este site, conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018)."
+    ctas={false}
+  />
+
+  <section class="section">
+    <div class="container legal">
+      <h2>1. Quem somos</h2>
+      <p>
+        Este site é mantido pela {site.legalName}{site.cnpj && `, inscrita no CNPJ ${site.cnpj}`}, responsável
+        (controladora) pelo tratamento dos dados descritos nesta política.
+      </p>
+
+      <h2>2. Dados que coletamos</h2>
+      <p>Pelo formulário de demonstração, coletamos apenas os dados que você informa:</p>
+      <ul>
+        <li>nome;</li>
+        <li>nome da clínica ou laboratório;</li>
+        <li>número de WhatsApp;</li>
+        <li>e-mail;</li>
+        <li>solução de interesse.</li>
+      </ul>
+      <p>Não coletamos dados de saúde de pacientes por meio deste site.</p>
+
+      <h2>3. Para que usamos os dados</h2>
+      <p>
+        Usamos seus dados exclusivamente para entrar em contato, agendar a demonstração solicitada e
+        apresentar nossas soluções. A base legal é o seu consentimento e o procedimento preliminar
+        à contratação solicitado por você (art. 7º, I e V, da LGPD).
+      </p>
+
+      <h2>4. Compartilhamento</h2>
+      <p>
+        Seus dados não são vendidos nem compartilhados com terceiros para fins de marketing. Eles podem
+        ser armazenados por fornecedores de tecnologia que nos prestam serviço (como hospedagem e
+        recebimento do formulário), que tratam os dados apenas conforme nossas instruções.
+      </p>
+
+      <h2>5. Por quanto tempo guardamos</h2>
+      <p>
+        Mantemos os dados enquanto houver relacionamento comercial ou interesse na contratação, ou até
+        que você solicite a exclusão, salvo obrigação legal de guarda.
+      </p>
+
+      <h2>6. Cookies</h2>
+      <p>
+        Este site não utiliza cookies de publicidade. Caso passemos a usar ferramentas de análise de
+        audiência, elas só serão ativadas após o seu consentimento.
+      </p>
+
+      <h2>7. Seus direitos</h2>
+      <p>
+        Você pode, a qualquer momento, solicitar confirmação do tratamento, acesso, correção,
+        anonimização, portabilidade ou exclusão dos seus dados, além de revogar o consentimento
+        (art. 18 da LGPD).
+      </p>
+
+      <h2>8. Contato</h2>
+      <p>
+        Para exercer seus direitos ou tirar dúvidas sobre esta política, escreva para{' '}
+        {site.contact.email ? <a href={`mailto:${email}`}>{email}</a> : email}.
+      </p>
+
+      <p class="legal__updated">Última atualização: outubro de 2026.</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal {
+    max-width: calc(760px + 2 * var(--gutter));
+    margin-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  @media (min-width: 1248px) {
+    .legal {
+      margin-left: calc((100% - var(--container)) / 2);
+    }
+  }
+  .legal h2 {
+    font-size: 22px;
+    margin-top: 16px;
+  }
+  .legal p,
+  .legal li {
+    color: var(--c-ardosia);
+  }
+  .legal ul {
+    margin: 0;
+    padding-left: 20px;
+  }
+  .legal__updated {
+    margin-top: 24px;
+    font-size: 14px;
+  }
+</style>

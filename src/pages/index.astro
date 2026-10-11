@@ -1,0 +1,101 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import SolutionsOverview from '../components/SolutionsOverview.astro';
+import AudienceCard from '../components/AudienceCard.astro';
+import HowItWorks from '../components/HowItWorks.astro';
+import ContactSection from '../components/ContactSection.astro';
+import { site } from '../data/site';
+import { audiences } from '../data/audiences';
+
+const siteUrl = Astro.site!;
+const websiteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': new URL('/#website', siteUrl).href,
+  name: site.name,
+  url: siteUrl.href,
+  inLanguage: 'pt-BR',
+  publisher: { '@id': new URL('/#organization', siteUrl).href },
+};
+---
+
+<BaseLayout
+  title="CTechsmart Solutions | Software para clínicas e laboratórios"
+  fullTitle
+  description="Chatbot de WhatsApp e Fast-Lab, agendamento online e gestão para clínicas e laboratórios. Menos faltas e mais faturamento, 100% na nuvem."
+  jsonLd={[websiteLd]}
+>
+  <section id="inicio" class="hero">
+    <div class="container hero__inner">
+      <p class="eyebrow">Software para clínicas e laboratórios</p>
+      <h1 class="hero__title">Atendimento, agenda e gestão conectados em uma só plataforma.</h1>
+      <p class="hero__lead">
+        Chatbots que respondem pacientes a qualquer hora, agendamento online e gestão da operação.
+        Tudo por assinatura, sem instalação.
+      </p>
+      <div class="hero__ctas">
+        <a href="#contato" class="btn btn--primary">Agendar demonstração</a>
+        <a href="#solucoes" class="btn btn--secondary">Conhecer as soluções</a>
+      </div>
+    </div>
+  </section>
+
+  <SolutionsOverview id="solucoes" />
+
+  <section id="para-quem" class="section section--nevoa">
+    <div class="container stack">
+      <SectionHeader eyebrow="Para quem" title="Feito para a rotina da saúde" />
+      <div class="grid-auto">
+        {audiences.map((a, i) => <AudienceCard audience={a} dark={i === 1} />)}
+      </div>
+    </div>
+  </section>
+
+  <HowItWorks id="como-funciona" />
+
+  <ContactSection />
+</BaseLayout>
+
+<style>
+  .hero {
+    background: var(--c-nevoa);
+  }
+  .hero__inner {
+    padding-top: 88px;
+    padding-bottom: 96px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .hero__title {
+    max-width: 760px;
+    font-size: 52px;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+  }
+  .hero__lead {
+    font-size: 19px;
+    color: var(--c-ardosia);
+    max-width: 540px;
+  }
+  .hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 8px;
+  }
+  @media (max-width: 720px) {
+    .hero__inner {
+      padding-top: 56px;
+      padding-bottom: 64px;
+    }
+    .hero__title {
+      font-size: 36px;
+    }
+    .hero__lead {
+      font-size: 17px;
+    }
+  }
+</style>

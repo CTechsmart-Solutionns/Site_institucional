@@ -1,0 +1,138 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import SectionHeader from '../../components/SectionHeader.astro';
+import BenefitGrid from '../../components/BenefitGrid.astro';
+import SolutionCard from '../../components/SolutionCard.astro';
+import HowItWorks from '../../components/HowItWorks.astro';
+import Faq from '../../components/Faq.astro';
+import ContactSection from '../../components/ContactSection.astro';
+import { solutions, type Solution } from '../../data/solutions';
+import { faqPageLd, serviceLd } from '../../lib/jsonld';
+
+export function getStaticPaths() {
+  return solutions.map((solution) => ({ params: { slug: solution.slug }, props: { solution } }));
+}
+
+interface Props {
+  solution: Solution;
+}
+const { solution } = Astro.props;
+const others = solutions.filter((s) => s.slug !== solution.slug);
+const path = `/solucoes/${solution.slug}`;
+const breadcrumbs = [
+  { name: 'Início', href: '/' },
+  { name: solution.name, href: path },
+];
+---
+
+<BaseLayout
+  title={solution.seo.title}
+  description={solution.seo.description}
+  breadcrumbs={breadcrumbs}
+  jsonLd={[
+    serviceLd({
+      name: solution.name,
+      description: solution.seo.description,
+      url: new URL(path, Astro.site).href,
+      siteUrl: Astro.site!,
+      logo: solution.brand?.symbolPublic,
+    }),
+    faqPageLd(solution.faq),
+  ]}
+>
+  <PageHero
+    breadcrumbs={breadcrumbs}
+    eyebrow={solution.eyebrow}
+    title={solution.h1}
+    intro={solution.intro}
+  >
+    {
+      solution.brand && (
+        <Image
+          slot="brand"
+          src={solution.brand.logo}
+          alt={`Logo ${solution.name}`}
+          width={480}
+          loading="eager"
+          fetchpriority="high"
+        />
+      )
+    }
+  </PageHero>
+
+  <section class="section">
+    <div class="container stack">
+      <SectionHeader eyebrow="Benefícios" title="O que muda na rotina da sua equipe" />
+      <BenefitGrid items={solution.benefits} />
+    </div>
+  </section>
+
+  <section class="section section--nevoa">
+    <div class="container stack">
+      <SectionHeader eyebrow="Para quem" title="Na clínica e no laboratório" />
+      <div class="grid-auto">
+        <article class="use">
+          <h3>Para clínicas</h3>
+          <p class="muted">{solution.forClinics}</p>
+          <a href="/para-clinicas">Soluções para clínicas →</a>
+        </article>
+        <article class="use">
+          <h3>Para laboratórios</h3>
+          <p class="muted">{solution.forLabs}</p>
+          <a href="/para-laboratorios">Soluções para laboratórios →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <HowItWorks />
+
+  <section class="section section--nevoa">
+    <div class="container stack">
+      <SectionHeader eyebrow="Dúvidas frequentes" title={solution.faqTitle} />
+      <Faq items={solution.faq} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container stack">
+      <SectionHeader
+        eyebrow="Plataforma integrada"
+        title="Funciona ainda melhor em conjunto"
+        lead="Os dados circulam entre as soluções sem retrabalho. Contrate agora o que precisa e adicione a outra quando quiser."
+      />
+      <div class="grid-auto others">
+        {others.map((s) => <SolutionCard solution={s} />)}
+      </div>
+    </div>
+  </section>
+
+  <ContactSection interest={solution.slug} />
+</BaseLayout>
+
+<style>
+  .others {
+    max-width: 600px;
+  }
+  .use {
+    flex: 1 1 420px;
+    min-width: 0;
+    background: var(--c-branco);
+    border-radius: var(--r-card);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .use h3 {
+    font-size: 22px;
+  }
+  .use a {
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    margin-top: auto;
+  }
+</style>

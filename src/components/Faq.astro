@@ -1,0 +1,43 @@
+---
+// Perguntas e respostas sempre abertas: visíveis no HTML (exigência do Google para FAQPage)
+// e navegáveis por título nos leitores de tela. O JSON-LD é gerado na página.
+import type { Faq } from '../data/solutions';
+
+interface Props {
+  items: Faq[];
+}
+const { items } = Astro.props;
+---
+
+<div class="faq">
+  {
+    items.map((item) => (
+      <div class="faq__item">
+        <h3>{item.q}</h3>
+        <p class="muted">{item.a}</p>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .faq {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 840px;
+  }
+  .faq__item {
+    background: var(--c-branco);
+    border: 1px solid var(--c-borda);
+    border-radius: var(--r-tile);
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .faq__item h3 {
+    font-size: 17px;
+    font-weight: 600;
+  }
+</style>
