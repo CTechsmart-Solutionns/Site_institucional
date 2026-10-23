@@ -2,7 +2,7 @@
 // MODELO — o texto precisa ser revisado por um profissional jurídico antes da publicação.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
-import { site } from '../data/site';
+import { addressLine, site } from '../data/site';
 
 const breadcrumbs = [
   { name: 'Início', href: '/' },
@@ -29,7 +29,7 @@ const email = site.contact.email ?? '[E-MAIL DO ENCARREGADO]';
     <div class="container legal">
       <h2>1. Quem somos</h2>
       <p>
-        Este site é mantido pela {site.legalName}{site.cnpj && `, inscrita no CNPJ ${site.cnpj}`}, responsável
+        Este site é mantido pela {site.name} ({site.legalName}{site.cnpj && `, CNPJ ${site.cnpj}`}){addressLine && `, com sede na ${addressLine}`}, responsável
         (controladora) pelo tratamento dos dados descritos nesta política.
       </p>
 

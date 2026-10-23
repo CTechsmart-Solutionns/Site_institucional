@@ -1,6 +1,6 @@
 ---
 import Logo from './Logo.astro';
-import { footerNav, site } from '../data/site';
+import { addressLine, footerNav, site } from '../data/site';
 
 const year = new Date().getFullYear();
 ---
@@ -29,7 +29,10 @@ const year = new Date().getFullYear();
     </nav>
   </div>
   <div class="container footer__bottom">
-    © {year} {site.name}{site.cnpj && ` · CNPJ ${site.cnpj}`}
+    <p>© {year} {site.name}</p>
+    <p>
+      {site.legalName}{site.cnpj && ` · CNPJ ${site.cnpj}`}{addressLine && ` · ${addressLine}`}
+    </p>
   </div>
 </footer>
 
@@ -82,5 +85,8 @@ const year = new Date().getFullYear();
     padding-top: 24px;
     padding-bottom: 32px;
     border-top: 1px solid rgba(182, 195, 207, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
   }
 </style>

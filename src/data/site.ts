@@ -2,7 +2,8 @@
 // não inventar — enquanto forem null, o site mostra/omite conforme cada componente.
 export const site = {
   name: 'CTechsmart Solutions',
-  legalName: 'CTechsmart Solutions',
+  // Razão social idêntica ao cartão CNPJ e ao portfólio empresarial da Meta.
+  legalName: 'Carlos Eduardo Gomes de Araujo',
   description:
     'Chatbot de atendimento e Fast-Lab (agendamento online e gestão) para clínicas e laboratórios. Software por assinatura, 100% na nuvem.',
   locale: 'pt_BR',
@@ -10,12 +11,24 @@ export const site = {
     whatsapp: "(22)99985-1983" as string | null, // ex.: '+55 11 90000-0000'
     email: "contato@ctechsmartsolutions.com" as string | null, // ex.: 'contato@empresa.com.br'
   },
-  cnpj: "54.408.750/0001-26" as string | null,
+  cnpj: '54.408.750/0001-26' as string | null,
+  address: {
+    street: 'Rua Nicanor Esteves, 151',
+    neighborhood: 'Oscar Brito',
+    city: 'Carapebus',
+    state: 'RJ',
+    postalCode: '27998-000',
+  } as { street: string; neighborhood: string; city: string; state: string; postalCode: string } | null,
   // Perfis oficiais (LinkedIn, Instagram…) — usados no JSON-LD `sameAs`.
   sameAs: [] as string[],
   // Endpoint que recebe o formulário de demonstração (Formspree, Netlify Forms, API própria…).
   formEndpoint: null as string | null,
 };
+
+/** Endereço em uma linha, como exibido no rodapé e na política de privacidade. */
+export const addressLine = site.address
+  ? `${site.address.street} – ${site.address.neighborhood}, ${site.address.city}/${site.address.state}, CEP ${site.address.postalCode}`
+  : null;
 
 /** WhatsApp só com dígitos e com o DDI 55 (formato exigido pelo wa.me e pelo JSON-LD). */
 export const whatsappIntl = (() => {

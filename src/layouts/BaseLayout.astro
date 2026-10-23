@@ -43,6 +43,18 @@ const organization = {
   '@type': 'Organization',
   '@id': new URL('/#organization', siteUrl).href,
   name: site.name,
+  legalName: site.legalName,
+  ...(site.cnpj && { taxID: site.cnpj }),
+  ...(site.address && {
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: site.address.street,
+      addressLocality: site.address.city,
+      addressRegion: site.address.state,
+      postalCode: site.address.postalCode,
+      addressCountry: 'BR',
+    },
+  }),
   url: siteUrl.href,
   logo: new URL('/logo.png', siteUrl).href,
   description: site.description,
