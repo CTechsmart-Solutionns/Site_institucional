@@ -22,7 +22,7 @@ export const site = {
   // Perfis oficiais (LinkedIn, Instagram…) — usados no JSON-LD `sameAs`.
   sameAs: [] as string[],
   // Endpoint que recebe o formulário de demonstração (Formspree, Netlify Forms, API própria…).
-  formEndpoint: null as string | null,
+  formEndpoint: 'https://formspree.io/f/xwlllaer' as string | null,
 };
 
 /** Endereço em uma linha, como exibido no rodapé e na política de privacidade. */

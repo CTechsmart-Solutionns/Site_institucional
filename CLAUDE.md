@@ -49,7 +49,7 @@ Antes de concluir qualquer mudança: `npm run check && npm run build && npm run 
 
 - Domínio: `https://ctechsmartsolutions.com` (sem www) em `astro.config.mjs` e `public/robots.txt`. Na hospedagem, redirecionar `www.` → domínio sem www (301) e forçar HTTPS.
 - WhatsApp, e-mail, CNPJ e redes sociais: preencher em `src/data/site.ts` (o site já mostra/omite automaticamente).
-- Formulário: definir serviço de recebimento e preencher `formEndpoint` (hoje mostra "Formulário ainda não configurado").
+- Formulário: Formspree (`formEndpoint` em `src/data/site.ts`), plano grátis com 50 envios/mês.
 - Política de privacidade: texto-modelo; precisa de revisão jurídica.
 
 ## Requisitos de SEO (obrigatórios)
