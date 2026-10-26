@@ -114,12 +114,12 @@ export const solutions: Solution[] = [
       'Visão de ocupação para preencher horários vagos',
     ],
     seo: {
-      title: 'Fast-Lab: agendamento e gestão para clínicas',
+      title: 'Fast-Lab: agendamento e gestão de laboratório',
       description:
-        'Fast-Lab: agenda online e gestão para clínicas e laboratórios. Menos faltas, horários mais ocupados e relatórios para aumentar o faturamento.',
+        'Fast-Lab: agendamento online e gestão para laboratórios de análises clínicas. Menos faltas, agenda cheia e relatórios para aumentar o faturamento.',
     },
     eyebrow: 'Agendamento e gestão',
-    h1: 'Fast-Lab: agendamento online e gestão para clínicas e laboratórios',
+    h1: 'Fast-Lab: agendamento online e gestão para laboratórios',
     intro:
       'O Fast-Lab junta agenda, gestão e indicadores numa só ferramenta. O paciente marca, confirma e reagenda sozinho, sua equipe enxerga a operação inteira num painel e você descobre onde estão os horários ociosos, para transformar agenda cheia em faturamento.',
     benefits: [
