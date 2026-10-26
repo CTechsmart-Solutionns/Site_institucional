@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import { site, whatsappIntl } from '../data/site';
 import soraBold from '@fontsource/sora/files/sora-latin-700-normal.woff2?url';
 import type { Crumb } from '../components/Breadcrumbs.astro';
+import Analytics from '@vercel/analytics/astro';
 
 interface Props {
   /** Título da página, sem o nome da empresa (≤ 60 caracteres no total). */
@@ -121,6 +122,7 @@ const allJsonLd = [organization, ...(breadcrumbLd ? [breadcrumbLd] : []), ...jso
     <meta name="theme-color" content="#0B1F33" />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
+    <Analytics />
     {allJsonLd.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data)} />)}
   </head>
   <body>
